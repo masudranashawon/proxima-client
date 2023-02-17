@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProjectDetails from "../components/ProjectDetails";
+import ProjectForm from "../components/ProjectForm";
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -14,7 +15,6 @@ const Home = () => {
         if (!res.ok) throw new Error("Something went wrong!");
         const data = await res.json();
         setProjects(data);
-        console.log(data);
         setLoading(false);
       } catch (error) {
         setError(error.messege);
@@ -24,6 +24,7 @@ const Home = () => {
 
     getProjects();
   }, []);
+
   return (
     <div className='container mx-auto py-20 grid grid-cols-3 gap-10'>
       <div className='left col-span-2'>
@@ -35,7 +36,7 @@ const Home = () => {
             ))}
         </div>
       </div>
-      <div className='right'></div>
+      <ProjectForm />
     </div>
   );
 };

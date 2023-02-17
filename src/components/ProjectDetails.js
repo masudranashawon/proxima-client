@@ -5,7 +5,7 @@ const ProjectDetails = ({ project }) => {
     <div className='project bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl flex flex-col gap-5 w-[32rem]'>
       <div className='top'>
         <span className='text-sky-400'>{project._id}</span>
-        <h3 className='text-3xl font-medium'>{project.title}</h3>
+        <h3 className='text-3xl font-medium truncate'>{project.title}</h3>
         <span className='text-sm tracking-widest text-slate-500 font-medium'>
           {project.tech}
         </span>
