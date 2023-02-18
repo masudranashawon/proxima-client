@@ -38,7 +38,6 @@ const ProjectForm = () => {
     //res.ok is false set error
     if (!res.ok) {
       setError(json.error);
-      console.log(error);
     }
 
     //res.ok is true, reset
