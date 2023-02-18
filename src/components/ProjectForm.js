@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useProjectsContext } from "../hooks/useProjectsContext";
 
 const ProjectForm = () => {
   const [title, setTitle] = useState("");
@@ -9,11 +10,13 @@ const ProjectForm = () => {
   const [dev, setDev] = useState("");
   const [error, setError] = useState(null);
 
+  const { dispatch } = useProjectsContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     //Data
-    const project = {
+    const projectObj = {
       title,
       tech,
       budget,
@@ -28,7 +31,7 @@ const ProjectForm = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(project),
+      body: JSON.stringify(projectObj),
     });
     const json = await res.json();
 
@@ -48,7 +51,8 @@ const ProjectForm = () => {
       setDev("");
       setError(null);
 
-      console.log("New project has been added to the database", json);
+      //Dispath
+      dispatch({ type: "CREATE_PROJECT", payload: json });
     }
   };
 
