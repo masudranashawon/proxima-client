@@ -9,6 +9,7 @@ const ProjectForm = () => {
   const [manager, setManager] = useState("");
   const [dev, setDev] = useState("");
   const [error, setError] = useState(null);
+  const [emptyFields, setEmptyFields] = useState([]);
 
   const { dispatch } = useProjectsContext();
 
@@ -38,6 +39,7 @@ const ProjectForm = () => {
     //res.ok is false set error
     if (!res.ok) {
       setError(json.error);
+      setEmptyFields(json.emptyFields);
     }
 
     //res.ok is true, reset
@@ -49,6 +51,7 @@ const ProjectForm = () => {
       setManager("");
       setDev("");
       setError(null);
+      setEmptyFields([]);
 
       //Dispath
       dispatch({ type: "CREATE_PROJECT", payload: json });
@@ -72,7 +75,11 @@ const ProjectForm = () => {
           type='text'
           id='title'
           placeholder='e.g e-commerce website'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("title")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
       </div>
 
@@ -89,7 +96,11 @@ const ProjectForm = () => {
           type='text'
           id='tech'
           placeholder='e.g node.js, react.js, redux etc.'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("tech")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
       </div>
 
@@ -106,7 +117,11 @@ const ProjectForm = () => {
           type='number'
           id='budget'
           placeholder='e.g 1500'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("budget")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
       </div>
 
@@ -123,7 +138,11 @@ const ProjectForm = () => {
           type='number'
           id='duration'
           placeholder='e.g 2'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("duration")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
       </div>
 
@@ -140,7 +159,11 @@ const ProjectForm = () => {
           type='text'
           id='manager'
           placeholder='e.g john doe'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("manager")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
       </div>
 
@@ -154,10 +177,14 @@ const ProjectForm = () => {
         <input
           value={dev}
           onChange={(e) => setDev(e.target.value)}
-          type='text'
+          type='number'
           id='dev'
           placeholder='e.g 5'
-          className='bg-transparent border border-slate-500 py-3 px-5 outline-none focus:border-sky-400 duration-300'
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+            emptyFields.includes("dev")
+              ? "border border-rose-500"
+              : "border border-slate-500"
+          }`}
         />
         <button
           type='submit'
