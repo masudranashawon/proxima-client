@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useProjectsContext } from "../hooks/useProjectsContext";
 
-const ProjectForm = () => {
-  const [title, setTitle] = useState("");
-  const [tech, setTech] = useState("");
-  const [budget, setBudget] = useState("");
-  const [duration, setDuration] = useState("");
-  const [manager, setManager] = useState("");
-  const [dev, setDev] = useState("");
+const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
+  const [title, setTitle] = useState(project ? project.title : "");
+  const [tech, setTech] = useState(project ? project.tech : "");
+  const [budget, setBudget] = useState(project ? project.budget : "");
+  const [duration, setDuration] = useState(project ? project.duration : "");
+  const [manager, setManager] = useState(project ? project.manager : "");
+  const [dev, setDev] = useState(project ? project.dev : "");
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -26,45 +26,85 @@ const ProjectForm = () => {
       dev,
     };
 
-    //Post req
-    const res = await fetch("http://localhost:5000/api/projects", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(projectObj),
-    });
-    const json = await res.json();
+    //Is there is no project, sent post req
+    if (!project) {
+      //Post req
+      const res = await fetch("http://localhost:5000/api/projects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectObj),
+      });
+      const json = await res.json();
 
-    //res.ok is false set error
-    if (!res.ok) {
-      setError(json.error);
-      setEmptyFields(json.emptyFields);
+      //res.ok is false set error
+      if (!res.ok) {
+        setError(json.error);
+        setEmptyFields(json.emptyFields);
+      }
+
+      //res.ok is true, reset
+      if (res.ok) {
+        setTitle("");
+        setTech("");
+        setBudget("");
+        setDuration("");
+        setManager("");
+        setDev("");
+        setError(null);
+        setEmptyFields([]);
+
+        //Dispath
+        dispatch({ type: "CREATE_PROJECT", payload: json });
+      }
+      return;
     }
 
-    //res.ok is true, reset
-    if (res.ok) {
-      setTitle("");
-      setTech("");
-      setBudget("");
-      setDuration("");
-      setManager("");
-      setDev("");
-      setError(null);
-      setEmptyFields([]);
+    //Is there is a project, sent patch req
+    if (project) {
+      //Sent patch req
+      const res = await fetch(
+        `http://localhost:5000/api/projects/${project._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(projectObj),
+        }
+      );
+      const json = await res.json();
+      //!res.ok
+      if (!res.ok) {
+        setError(json.error);
+        setEmptyFields(json.emptyFields);
+      }
 
-      //Dispath
-      dispatch({ type: "CREATE_PROJECT", payload: json });
+      //res.ok
+      if (res.ok) {
+        setError(null);
+        setEmptyFields([]);
+
+        //Dispatch
+        dispatch({ type: "UPDATE_PROJECT", payload: json });
+        //Close overlay & modal
+        setIsModalOpen(false);
+        setIsOverlayOpen(false);
+      }
+      return;
     }
   };
 
   return (
-    <form className='project-form flex flex-col gap-5' onSubmit={handleSubmit}>
-      <h2 className='text-4xl text-sky-400 mb-10'>Add a new Project</h2>
+    <form className='project-form flex flex-col gap-3' onSubmit={handleSubmit}>
+      <h2 className={`text-3xl text-sky-400 mb-3 ${project ? "hidden" : ""}`}>
+        Add a new Project
+      </h2>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='title'
+          htmlFor={`${project ? "update-" : ""}title`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Project title
@@ -73,9 +113,9 @@ const ProjectForm = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           type='text'
-          id='title'
+          id={`${project ? "update-" : ""}title`}
           placeholder='e.g e-commerce website'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("title")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -83,9 +123,9 @@ const ProjectForm = () => {
         />
       </div>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='tech'
+          htmlFor={`${project ? "update-" : ""}tech`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Technologies
@@ -94,9 +134,9 @@ const ProjectForm = () => {
           value={tech}
           onChange={(e) => setTech(e.target.value)}
           type='text'
-          id='tech'
+          id={`${project ? "update-" : ""}tech`}
           placeholder='e.g node.js, react.js, redux etc.'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("tech")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -104,9 +144,9 @@ const ProjectForm = () => {
         />
       </div>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='budget'
+          htmlFor={`${project ? "update-" : ""}budget`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Budget (in USD)
@@ -115,9 +155,9 @@ const ProjectForm = () => {
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
           type='number'
-          id='budget'
+          id={`${project ? "update-" : ""}budget`}
           placeholder='e.g 1500'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("budget")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -125,9 +165,9 @@ const ProjectForm = () => {
         />
       </div>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='duration'
+          htmlFor={`${project ? "update-" : ""}duration`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Duration (in weeks)
@@ -136,9 +176,9 @@ const ProjectForm = () => {
           value={duration}
           onChange={(e) => setDuration(e.target.value)}
           type='number'
-          id='duration'
+          id={`${project ? "update-" : ""}duration`}
           placeholder='e.g 2'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("duration")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -146,9 +186,9 @@ const ProjectForm = () => {
         />
       </div>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='manager'
+          htmlFor={`${project ? "update-" : ""}manager`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Manager
@@ -157,9 +197,9 @@ const ProjectForm = () => {
           value={manager}
           onChange={(e) => setManager(e.target.value)}
           type='text'
-          id='manager'
+          id={`${project ? "update-" : ""}manager`}
           placeholder='e.g john doe'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("manager")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -167,9 +207,9 @@ const ProjectForm = () => {
         />
       </div>
 
-      <div className='form-ctrl flex flex-col gap-2'>
+      <div className='form-ctrl flex flex-col gap-1'>
         <label
-          htmlFor='dev'
+          htmlFor={`${project ? "update-" : ""}dev`}
           className='cursor-pointer hover:text-sky-400 duration-300'
         >
           Developers
@@ -178,9 +218,9 @@ const ProjectForm = () => {
           value={dev}
           onChange={(e) => setDev(e.target.value)}
           type='number'
-          id='dev'
+          id={`${project ? "update-" : ""}dev`}
           placeholder='e.g 5'
-          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
             emptyFields.includes("dev")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -190,7 +230,7 @@ const ProjectForm = () => {
           type='submit'
           className='bg-sky-400 text-slate-900 py-3 rounded-lg hover:bg-sky-50 duration-300'
         >
-          Add project
+          {project ? "Update project" : "Add project"}
         </button>
         {error && (
           <p className='bg-rose-500/20 rounded-lg p-5 text-rose-500 border border-rose-500'>

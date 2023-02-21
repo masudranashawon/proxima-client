@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { useProjectsContext } from "../hooks/useProjectsContext";
 import { currencyFormatter } from "../utils/currencyFormatter";
 import moment from "moment";
+import ProjectForm from "./ProjectForm";
 
 const ProjectDetails = ({ project }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+
   const { dispatch } = useProjectsContext();
 
   const handleDelete = async () => {
@@ -17,6 +22,16 @@ const ProjectDetails = ({ project }) => {
     if (res.ok) {
       dispatch({ type: "DELETE_PROJECT", payload: json });
     }
+  };
+
+  const handleUpdate = () => {
+    setIsModalOpen(true);
+    setIsOverlayOpen(true);
+  };
+
+  const handleOverlay = () => {
+    setIsModalOpen(false);
+    setIsOverlayOpen(false);
   };
 
   return (
@@ -48,7 +63,10 @@ const ProjectDetails = ({ project }) => {
         </div>
       </div>
       <div className='bottom flex gap-5'>
-        <button className='bg-sky-400 text-slate-900 py-2 px-6 rounded shadow-xl hover:bg-sky-50 duration-300'>
+        <button
+          onClick={handleUpdate}
+          className='bg-sky-400 text-slate-900 py-2 px-6 rounded shadow-xl hover:bg-sky-50 duration-300'
+        >
           Update
         </button>
         <button
@@ -57,6 +75,28 @@ const ProjectDetails = ({ project }) => {
         >
           Delete
         </button>
+      </div>
+
+      {/* OVERLAY */}
+      <div
+        onClick={handleOverlay}
+        className={`overlay fixed z-[1] h-screen w-screen bg-slate-900/50 backdrop-blur-sm top-0 left-0 right-0 bottom-0 ${
+          isOverlayOpen ? "" : "hidden"
+        }`}
+      ></div>
+
+      {/* MODAL */}
+      <div
+        className={`update-modal w-[30rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 p-10 rounded-xl border border-slate-700 shadow-xl z-[2] ${
+          isModalOpen ? "" : "hidden"
+        }`}
+      >
+        <h2 className='text-4xl text-sky-400 mb-10'>Update project</h2>
+        <ProjectForm
+          project={project}
+          setIsModalOpen={setIsModalOpen}
+          setIsOverlayOpen={setIsOverlayOpen}
+        />
       </div>
     </div>
   );
