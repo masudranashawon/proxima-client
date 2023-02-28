@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 const Navbar = () => {
   const { user } = useAuthContext();
+
+  const { logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className='navbar container mx-auto h-20 flex justify-between items-center border-b border-sky-900'>
@@ -25,6 +32,7 @@ const Navbar = () => {
           <div className='flex gap-5 items-center'>
             <span>{user.email}</span>
             <button
+              onClick={handleLogout}
               type='submit'
               className='bg-rose-500 text-white py-3 px-5 rounded-lg hover:bg-sky-50 hover:text-slate-900 duration-300'
             >
