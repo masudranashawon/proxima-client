@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
 import { useProjectsContext } from "../hooks/useProjectsContext";
 
 const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
@@ -12,9 +13,15 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   const { dispatch } = useProjectsContext();
+  const { user } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setError("Please log in to access this feature.");
+      return;
+    }
 
     //Data
     const projectObj = {
@@ -33,6 +40,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
         },
         body: JSON.stringify(projectObj),
       });
@@ -70,11 +78,14 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(projectObj),
         }
       );
+
       const json = await res.json();
+
       //!res.ok
       if (!res.ok) {
         setError(json.error);
@@ -88,6 +99,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
 
         //Dispatch
         dispatch({ type: "UPDATE_PROJECT", payload: json });
+
         //Close overlay & modal
         setIsModalOpen(false);
         setIsOverlayOpen(false);
@@ -116,7 +128,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}title`}
           placeholder='e.g e-commerce website'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("title")
+            emptyFields?.includes("title")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
@@ -137,7 +149,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}tech`}
           placeholder='e.g node.js, react.js, redux etc.'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("tech")
+            emptyFields?.includes("tech")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
@@ -158,7 +170,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}budget`}
           placeholder='e.g 1500'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("budget")
+            emptyFields?.includes("budget")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
@@ -179,7 +191,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}duration`}
           placeholder='e.g 2'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("duration")
+            emptyFields?.includes("duration")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
@@ -200,7 +212,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}manager`}
           placeholder='e.g john doe'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("manager")
+            emptyFields?.includes("manager")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
@@ -221,7 +233,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           id={`${project ? "update-" : ""}dev`}
           placeholder='e.g 5'
           className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
-            emptyFields.includes("dev")
+            emptyFields?.includes("dev")
               ? "border border-rose-500"
               : "border border-slate-500"
           }`}
