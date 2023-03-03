@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSignup } from "../hooks/useSignup";
 
 const Signup = () => {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,7 +12,7 @@ const Signup = () => {
     e.preventDefault();
 
     //Signup user
-    await signup(email, password);
+    await signup(fullName, email, password);
   };
 
   return (
@@ -19,8 +20,24 @@ const Signup = () => {
       onSubmit={handleSignup}
       className='signup-form flex flex-col gap-5 py-20 max-w-sm mx-auto'
     >
-      <h2 className='text-4xl font-medium text-sky-400 mb-10'>Signup</h2>
+      <h2 className='text-4xl font-semibold text-sky-400 mb-5'>Sign up</h2>
 
+      <div className='form-ctrl flex flex-col gap-2'>
+        <label
+          htmlFor='full-name'
+          className='cursor-pointer hover:text-sky-400 duration-300'
+        >
+          Full name
+        </label>
+        <input
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          type='text'
+          id='full-name'
+          placeholder='e.g Jhon Doe'
+          className='py-3 px-5 rounded-md bg-transparent border border-slate-500 outline-none focus:border-sky-400 duration-300'
+        />
+      </div>
       <div className='form-ctrl flex flex-col gap-2'>
         <label
           htmlFor='email'
@@ -49,7 +66,7 @@ const Signup = () => {
           onChange={(e) => setPassword(e.target.value)}
           type='password'
           id='password'
-          placeholder='Enter your password'
+          placeholder='Write a strong password'
           className='py-3 px-5 rounded-md bg-transparent border border-slate-500 outline-none focus:border-sky-400 duration-300'
         />
       </div>

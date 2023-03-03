@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
 
 const Navbar = () => {
+  const [hover, setHover] = useState(false);
   const { user } = useAuthContext();
   const { logout } = useLogout();
 
@@ -11,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className='navbar container mx-auto h-20 flex justify-between items-center border-b border-sky-900'>
+    <div className='navbar container mx-auto h-24 flex flex-col justify-center lg:flex-row lg:h-20 lg:justify-between items-center border-b border-sky-900'>
       <Link to='/' className='logo text-2xl font-medium text-sky-400'>
         Proxima
       </Link>
@@ -28,8 +30,33 @@ const Navbar = () => {
           </div>
         )}
         {user && (
-          <div className='flex gap-5 items-center'>
-            <span>{user.email}</span>
+          <div className='flex gap-5 lg:w-auto justify-around items-center relative w-screen'>
+            <h3>
+              {user?.fullName && "Welcome,"}{" "}
+              <span
+                onMouseOver={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                className={`${
+                  user?.fullName && "capitalize"
+                } font-bold cursor-pointer text-sky-50 hover:text-sky-400 duration-300
+                `}
+              >
+                {user?.fullName ? `${user?.fullName}` : user?.email}
+              </span>
+              {hover && user?.fullName ? (
+                <p
+                  onMouseOver={() => setHover(true)}
+                  onMouseLeave={() => setHover(false)}
+                  className='bg-sky-400 w-full h-full p-3 px-5 rounded-lg absolute -bottom-[100%] left-[50%] -translate-x-[50%] shadow-xl'
+                >
+                  <span className='block user-email w-full h-full truncate text-center font-bold text-sky-800'>
+                    {user?.email}
+                  </span>
+
+                  <span className='w-5 h-5 rotate-45 bg-sky-400 absolute -top-[20%] left-[50%] -translate-x-[50%] z-[1]'></span>
+                </p>
+              ) : null}
+            </h3>
             <button
               onClick={handleLogout}
               type='submit'

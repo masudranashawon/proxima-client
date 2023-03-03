@@ -130,7 +130,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='text'
           id={`${project ? "update-" : ""}title`}
           placeholder='e.g e-commerce website'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("title")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -151,7 +151,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='text'
           id={`${project ? "update-" : ""}tech`}
           placeholder='e.g node.js, react.js, redux etc.'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("tech")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -172,7 +172,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='number'
           id={`${project ? "update-" : ""}budget`}
           placeholder='e.g 1500'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("budget")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -193,7 +193,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='number'
           id={`${project ? "update-" : ""}duration`}
           placeholder='e.g 2'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("duration")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -214,7 +214,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='text'
           id={`${project ? "update-" : ""}manager`}
           placeholder='e.g john doe'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("manager")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -235,7 +235,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
           type='number'
           id={`${project ? "update-" : ""}dev`}
           placeholder='e.g 5'
-          className={`bg-transparent py-2 px-3 outline-none focus:border-sky-400 duration-300 ${
+          className={`bg-transparent py-3 px-5 outline-none focus:border-sky-400 duration-300 ${
             emptyFields?.includes("dev")
               ? "border border-rose-500"
               : "border border-slate-500"
@@ -243,7 +243,7 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
         />
         <button
           type='submit'
-          className='bg-sky-400 text-slate-900 py-3 rounded-lg hover:bg-sky-50 duration-300'
+          className='bg-sky-400 text-slate-900 py-3 rounded-lg hover:bg-sky-50 duration-300 mt-3'
         >
           {project ? "Update project" : "Add project"}
         </button>

@@ -31,8 +31,8 @@ const Home = () => {
   }, [dispatch, user]);
 
   return (
-    <div className='container mx-auto py-10 grid grid-cols-3 gap-10'>
-      <div className='left col-span-2'>
+    <div className='home container mx-auto py-10 grid md:grid-cols-3 gap-10 w-full'>
+      <div className='left md:col-span-2'>
         <h2 className='text-3xl text-sky-400 mb-10'>
           {projects.length < 1 ? (
             "No project available here!"

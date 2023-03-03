@@ -45,7 +45,7 @@ const ProjectDetails = ({ project }) => {
   };
 
   return (
-    <div className='project bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl flex flex-col gap-5 w-[32rem]'>
+    <div className='project bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl flex flex-col gap-5 w-full md:w-[32rem]'>
       <div className='top'>
         <span className='text-sky-400'>{project._id}</span>
         <h3 className='text-3xl font-medium truncate'>{project.title}</h3>
@@ -97,7 +97,7 @@ const ProjectDetails = ({ project }) => {
 
       {/* MODAL */}
       <div
-        className={`update-modal w-[30rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 p-10 rounded-xl border border-slate-700 shadow-xl z-[2] ${
+        className={`update-modal w-[30rem] absolute 2xl:fixed top-0 2xl:top-1/2 2xl:-translate-y-1/2 left-1/2 -translate-x-1/2 bg-slate-800 p-10 rounded-xl border border-slate-700 shadow-xl z-[2] ${
           isModalOpen ? "" : "hidden"
         }`}
       >
