@@ -73,7 +73,7 @@ npm start
 
 ## Links
 
-- [Live Demo](https://proxima-web.netlify.app/)
+- [Live Demo](https://proxima-application.netlify.app)
 - [Front-End Repository](https://github.com/masudranashawon/proxima-client)
 - [Back-End Repository](https://github.com/masudranashawon/proxima-server)
 
